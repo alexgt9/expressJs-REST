@@ -22,34 +22,34 @@ app.param('name', function(request, response, next){
 	next();
 });
 
-app.get('/blocks', function(request, response){
-	response.json(Object.keys(blocks));
-});
+app.route('/blocks')
+	.get(function(request, response){
+		response.json(Object.keys(blocks));
+	})
+	.post(parseUrlencoded, function(request, response){
+		var newBlock = request.body;
+		blocks[newBlock.name] = newBlock.description;
 
-app.get('/blocks/:name', function(request, response){
-	var description = blocks[request.blockName];
-	if (!description) {
-		response.status(404).json("No description found for " + request.blockName);
-	}else{
-		response.json(description);
-	}
-});
+		response.status(201).json(newBlock);
+	});
 
-app.post('/blocks', parseUrlencoded, function(request, response){
-	var newBlock = request.body;
-	blocks[newBlock.name] = newBlock.description;
-
-	response.status(201).json(newBlock);
-});
-
-app.delete('/blocks/:name', function(request, response){
-	if (blocks[request.blockName]) {
-		delete blocks[request.blockName];
-		response.sendStatus(200);
-	}else{
-		response.status(404).json("Block not found");
-	}
-});
+app.route('/blocks/:name')
+	.get(function(request, response){
+		var description = blocks[request.blockName];
+		if (!description) {
+			response.status(404).json("No description found for " + request.blockName);
+		}else{
+			response.json(description);
+		}
+	})
+	.delete(function(request, response){
+		if (blocks[request.blockName]) {
+			delete blocks[request.blockName];
+			response.sendStatus(200);
+		}else{
+			response.status(404).json("Block not found");
+		}
+	});
 
 app.listen(3000, function(){
 	console.log('Running Express');
