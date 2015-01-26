@@ -12,10 +12,21 @@ var blocks = {
 
 app.use(express.static('public'));
 
+app.param('name', function(request, response, next){
+	var blockName = request.params.name;
+	request.blockName = blockName[0].toUpperCase() + blockName.slice(1).toLowerCase();
+
+	next();
+});
+
+app.get('/blocks', function(request, response){
+	response.json(Object.keys(blocks));
+});
+
 app.get('/blocks/:name', function(request, response){
-	var description = blocks[request.params.name];
+	var description = blocks[request.blockName];
 	if (!description) {
-		response.status(404).json("No description found for " + request.params.name);
+		response.status(404).json("No description found for " + request.blockName);
 	}else{
 		response.json(description);
 	}
