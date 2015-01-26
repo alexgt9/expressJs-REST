@@ -4,6 +4,9 @@ var app = express();
 var logger = require('./logger');
 app.use(logger);
 
+var bodyParser = require('body-parser');
+var parseUrlencoded = bodyParser.urlencoded({extended: false});
+
 var blocks = {
 	'Fixed': 'Fastendes Securely',
 	'Movable': 'Capable to move',
@@ -30,6 +33,13 @@ app.get('/blocks/:name', function(request, response){
 	}else{
 		response.json(description);
 	}
+});
+
+app.post('/blocks', parseUrlencoded, function(request, response){
+	var newBlock = request.body;
+	blocks[newBlock.name] = newBlock.description;
+
+	response.status(201).json(newBlock);
 });
 
 app.listen(3000, function(){
