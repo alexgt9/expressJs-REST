@@ -1,0 +1,14 @@
+{
+  "name": "building-blocks",
+  "version": "0.0.1",
+  "description": "Simple application using nodejs",
+  "author": "Alejandro Perez <alexgt9@gmail.com>",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "4.9.x"
+  },
+  "private": true,
+  "license": "MIT"
+}
