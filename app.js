@@ -42,6 +42,15 @@ app.post('/blocks', parseUrlencoded, function(request, response){
 	response.status(201).json(newBlock);
 });
 
+app.delete('/blocks/:name', function(request, response){
+	if (blocks[request.blockName]) {
+		delete blocks[request.blockName];
+		response.sendStatus(200);
+	}else{
+		response.status(404).json("Block not found");
+	}
+});
+
 app.listen(3000, function(){
 	console.log('Running Express');
 });
